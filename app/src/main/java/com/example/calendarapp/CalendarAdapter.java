@@ -1,6 +1,7 @@
 package com.example.calendarapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class CalendarAdapter extends RecyclerView.Adapter {
 
+    private Context mContext;
     private String[] dayList;
     private int year;
     private int month;
     private int day;
+    private int emptyDay;
+    private String uniqueID;
+    private ArrayList<Memo> memoList;
 
-    public CalendarAdapter(String[] dayList, int year, int month, int day) {
+    public CalendarAdapter(Context context, String[] dayList, int year, int month, int day, int emptyDay, String uniqueID, ArrayList<Memo> memoList) {
         this.dayList = dayList;
         this.year = year;
         this.month = month;
         this.day = day;
+        this.mContext = context;
+        this.emptyDay = emptyDay-1;
+        this.uniqueID = uniqueID;
+        this.memoList = memoList;
     }
 
     @NonNull
@@ -39,6 +50,13 @@ public class CalendarAdapter extends RecyclerView.Adapter {
         String day_text = dayList[position];
         DateViewHolder dateViewHolder = (DateViewHolder) holder;
         dateViewHolder.day_item.setText(day_text);
+        String today = year + "-" + month + "-" + day_text;
+
+        for(Memo m : memoList) {
+            if (m.getDate().equals(today)) {
+                dateViewHolder.diary_item.setText(m.getContent());
+            }
+        }
     }
 
     @Override
@@ -48,20 +66,29 @@ public class CalendarAdapter extends RecyclerView.Adapter {
 
     public class DateViewHolder extends RecyclerView.ViewHolder {
         TextView day_item;
+        TextView diary_item;
 
         public DateViewHolder(@NonNull View itemView) {
             super(itemView);
 
             day_item = itemView.findViewById(R.id.day_item);
+            diary_item = itemView.findViewById(R.id.diary_item);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getBindingAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION) {
-                        dayList[pos] = year + "/" + month + "/" + pos;
+//                        dayList[pos] = year + "/" + month + "/" + (pos-emptyDay);
+//                        notifyItemChanged(pos);
+//                        today = year + "-" + month + "-" + (pos-emptyDay);
 
-                        notifyItemChanged(pos);
+                        Intent intent = new Intent(mContext, MemoWriteActivity.class);
+                        intent.putExtra("year", year);
+                        intent.putExtra("month", month);
+                        intent.putExtra("day", pos-emptyDay);
+                        intent.putExtra("uniqueID", uniqueID);
+                        mContext.startActivity(intent);
                     }
                 }
             });

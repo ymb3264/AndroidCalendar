@@ -1,5 +1,6 @@
 package com.example.calendarapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,10 +11,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Member;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +31,39 @@ public class MainActivity extends AppCompatActivity {
     private int month;
     private int day;
     private RecyclerView recyclerView;
+    private String uniqueID;
+    ArrayList<Memo> memoList = new ArrayList<Memo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = database.getReference();
+
+        System.out.println(memoList);
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                memoList.clear();
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Memo m = dataSnapshot.getValue(Memo.class);
+//                    System.out.println(m);
+                    memoList.add(m);
+//                    System.out.println(memoList);
+                }
+                showCalendar();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("error", "error");
+            }
+        });
+
+        uniqueID = UUID.randomUUID().toString();
         Date time = new Date();
         SimpleDateFormat formatYear = new SimpleDateFormat("yyyy");
         SimpleDateFormat formatMonth = new SimpleDateFormat("MM");
@@ -75,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showCalendar();
+//        showCalendar();
     }
 
     public void showCalendar() {
@@ -84,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)-1;
         String[] dayList = new String[dayOfMonth+dayOfWeek];
 
-        System.out.println(dayOfMonth);
+//        System.out.println(dayOfMonth);
 
         for(int i = 1; i <= dayList.length; i++) {
             if(i <= dayOfWeek) {
@@ -94,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        CalendarAdapter calendarAdapter = new CalendarAdapter(dayList, year, month, day);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this, dayList, year, month, day, dayOfWeek, uniqueID, memoList);
         recyclerView.setAdapter(calendarAdapter);
     }
 
@@ -108,4 +145,53 @@ public class MainActivity extends AppCompatActivity {
         }
         return 0;
     }
+
+
+
+
+
+
+
+//    {
+//        "user1" : {
+//                "memo1" : {
+//                    "date" : "1",
+//                    "content" : "1"
+//                },
+//                "memo2" : {
+//                    "date" : "2",
+//                    "content" : "2"
+//                }
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
