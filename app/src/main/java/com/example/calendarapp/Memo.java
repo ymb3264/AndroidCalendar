@@ -10,7 +10,6 @@ public class Memo {
 
     public Memo(String date, String content) {
 //        this.user = user;
-//        this.memoDate = memoDate;
         this.date = date;
         this.content = content;
     }

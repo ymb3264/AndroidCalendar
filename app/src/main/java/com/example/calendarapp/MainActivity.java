@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = database.getReference();
+        DatabaseReference dbRef = database.getReference("user1");
 
         System.out.println(memoList);
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 memoList.clear();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Memo m = dataSnapshot.getValue(Memo.class);
-//                    System.out.println(m);
+                    System.out.println(m);
                     memoList.add(m);
 //                    System.out.println(memoList);
                 }

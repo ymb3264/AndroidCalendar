@@ -14,8 +14,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MemoWriteActivity extends AppCompatActivity {
 
-    private int count;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +22,22 @@ public class MemoWriteActivity extends AppCompatActivity {
         TextView today = (TextView)findViewById(R.id.today);
         Button inputMemoBtn = (Button)findViewById(R.id.inputMemoBtn);
         EditText inputMemo = (EditText)findViewById(R.id.inputMemo);
+        Button deleteMemoBtn = (Button)findViewById(R.id.deletetMemoBtn);
 
         Intent intent = getIntent();
         int year = intent.getIntExtra("year", 0);
         int month = intent.getIntExtra("month", 0);
         int day = intent.getIntExtra("day", 0);
         String uniqueID = intent.getStringExtra("uniqueID").toString();
+
+        String memoContent = null;
+        if(intent.getStringExtra("memoContent") != null) {
+            memoContent = intent.getStringExtra("memoContent").toString();
+            inputMemo.setText(memoContent);
+            inputMemoBtn.setText("수정하기");
+            deleteMemoBtn.setVisibility(View.VISIBLE);
+        }
+
         String date = year + "-" + month + "-" + day;
 
         today.setText(year + "." + month + "." + day);
@@ -44,15 +52,25 @@ public class MemoWriteActivity extends AppCompatActivity {
                 String inputText = inputMemo.getText().toString();
                 String date = year + "-" + month + "-" + day;
                 String m = "memo" + date;
-//                memo.setUser("user1");
                 memo.setDate(date);
                 memo.setContent(inputText);
 
-                dbRef.child(m).setValue(memo);
+                dbRef.child("user1").child(m).setValue(memo);
 
                 Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent2);
-                count++;
+            }
+        });
+
+        deleteMemoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = year + "-" + month + "-" + day;
+                String m = "memo" + date;
+
+                dbRef.child("user1").child(m).child("content").setValue("");
+                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent2);
             }
         });
     }

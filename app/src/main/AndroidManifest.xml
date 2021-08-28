@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CalendarApp">
-        <activity android:name=".MemoWriteActivity"></activity>
+        <activity android:name=".MemoWriteActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.CalendarApp.NoActionBar">

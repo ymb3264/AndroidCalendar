@@ -88,7 +88,14 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         intent.putExtra("month", month);
                         intent.putExtra("day", pos-emptyDay);
                         intent.putExtra("uniqueID", uniqueID);
-                        mContext.startActivity(intent);
+
+                        if(diary_item.getText().toString().equals("")) {
+                            mContext.startActivity(intent);
+                        } else {
+                            intent.putExtra("memoContent", diary_item.getText().toString());
+                            mContext.startActivity(intent);
+                        }
+
                     }
                 }
             });
