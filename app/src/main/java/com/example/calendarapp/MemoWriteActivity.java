@@ -28,7 +28,7 @@ public class MemoWriteActivity extends AppCompatActivity {
         int year = intent.getIntExtra("year", 0);
         int month = intent.getIntExtra("month", 0);
         int day = intent.getIntExtra("day", 0);
-        String uniqueID = intent.getStringExtra("uniqueID").toString();
+        String androidID = intent.getStringExtra("androidID").toString();
 
         String memoContent = null;
         if(intent.getStringExtra("memoContent") != null) {
@@ -55,7 +55,7 @@ public class MemoWriteActivity extends AppCompatActivity {
                 memo.setDate(date);
                 memo.setContent(inputText);
 
-                dbRef.child("user1").child(m).setValue(memo);
+                dbRef.child(androidID).child(m).setValue(memo);
 
                 Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent2);
@@ -68,7 +68,7 @@ public class MemoWriteActivity extends AppCompatActivity {
                 String date = year + "-" + month + "-" + day;
                 String m = "memo" + date;
 
-                dbRef.child("user1").child(m).child("content").setValue("");
+                dbRef.child(androidID).child(m).child("content").setValue("");
                 Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent2);
             }

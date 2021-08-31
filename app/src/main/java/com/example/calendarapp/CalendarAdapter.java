@@ -20,17 +20,17 @@ public class CalendarAdapter extends RecyclerView.Adapter {
     private int month;
     private int day;
     private int emptyDay;
-    private String uniqueID;
+    private String androidID;
     private ArrayList<Memo> memoList;
 
-    public CalendarAdapter(Context context, String[] dayList, int year, int month, int day, int emptyDay, String uniqueID, ArrayList<Memo> memoList) {
+    public CalendarAdapter(Context context, String[] dayList, int year, int month, int day, int emptyDay, String androidID, ArrayList<Memo> memoList) {
         this.dayList = dayList;
         this.year = year;
         this.month = month;
         this.day = day;
         this.mContext = context;
         this.emptyDay = emptyDay-1;
-        this.uniqueID = uniqueID;
+        this.androidID = androidID;
         this.memoList = memoList;
     }
 
@@ -54,7 +54,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
 
         for(Memo m : memoList) {
             if (m.getDate().equals(today)) {
-                dateViewHolder.diary_item.setText(m.getContent());
+                    dateViewHolder.diary_item.setText(m.getContent());
             }
         }
     }
@@ -87,7 +87,7 @@ public class CalendarAdapter extends RecyclerView.Adapter {
                         intent.putExtra("year", year);
                         intent.putExtra("month", month);
                         intent.putExtra("day", pos-emptyDay);
-                        intent.putExtra("uniqueID", uniqueID);
+                        intent.putExtra("androidID", androidID);
 
                         if(diary_item.getText().toString().equals("")) {
                             mContext.startActivity(intent);

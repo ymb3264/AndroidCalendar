@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String uniqueID;
     ArrayList<Memo> memoList = new ArrayList<Memo>();
+    private String androidID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = database.getReference("user1");
+        androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        System.out.println(memoList);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = database.getReference(androidID);
 
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -50,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 memoList.clear();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Memo m = dataSnapshot.getValue(Memo.class);
-                    System.out.println(m);
+
                     memoList.add(m);
-//                    System.out.println(memoList);
                 }
                 showCalendar();
             }
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        CalendarAdapter calendarAdapter = new CalendarAdapter(this, dayList, year, month, day, dayOfWeek, uniqueID, memoList);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this, dayList, year, month, day, dayOfWeek, androidID, memoList);
         recyclerView.setAdapter(calendarAdapter);
     }
 
@@ -145,26 +146,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return 0;
     }
-
-
-
-
-
-
-
-//    {
-//        "user1" : {
-//                "memo1" : {
-//                    "date" : "1",
-//                    "content" : "1"
-//                },
-//                "memo2" : {
-//                    "date" : "2",
-//                    "content" : "2"
-//                }
-//        }
-//    }
-
 
 
 

@@ -26,14 +26,14 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:entries="@array/year"
-            android:background="#DF6565"
+            android:background="#03A9F4"
             />
         <Spinner
             android:id="@+id/month_spin"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:entries="@array/month"
-            android:background="#FFEB3B"
+            android:background="#11C1D1"
             />
     </LinearLayout>
 
@@ -41,13 +41,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="#2196F3"
         android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="일"
+            android:textColor="#FF0000"
             android:gravity="center"
             android:layout_weight="1"
             android:textSize="15sp"/>
@@ -90,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="토"
+            android:textColor="#FF0000"
             android:gravity="center"
             android:layout_weight="1"
             android:textSize="15sp"/>
